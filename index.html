@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Voyage Nike｜新規カルテ受付</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#f5f5f5;color:#1a1a1a;min-height:100vh}
+.header{background:#fff;padding:16px 20px;text-align:center;border-bottom:1px solid #eee}
+.header h1{font-size:17px;font-weight:600;letter-spacing:.06em}
+.header p{font-size:12px;color:#888;margin-top:3px}
+.container{max-width:480px;margin:0 auto;padding:16px}
+.step-bar{display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.step-circle{width:28px;height:28px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#aaa;background:#fff;transition:all .3s}
+.step-circle.active{border-color:#1a1a1a;color:#1a1a1a}
+.step-circle.done{border-color:#1a1a1a;background:#1a1a1a;color:#fff}
+.step-label{font-size:10px;color:#aaa}
+.step-label.active{color:#1a1a1a;font-weight:500}
+.step-line{height:2px;background:#ddd;flex:1;margin-top:13px}
+.step-line.done{background:#1a1a1a}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:600;color:#999;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;font-weight:500;color:#444;margin-bottom:6px}
+.req{color:#e74c3c;margin-left:2px}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:16px;font-family:inherit;background:#fff;color:#1a1a1a;-webkit-appearance:none;appearance:none}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#1a1a1a}
+.field textarea{resize:none;min-height:72px;line-height:1.6}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chk-group{display:flex;flex-direction:column;gap:8px}
+.chk-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chk-label{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;transition:all .2s}
+.chk-label input{width:16px;height:16px;accent-color:#1a1a1a;flex-shrink:0}
+.radio-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.radio-label{display:flex;align-items:center;gap:7px;font-size:14px;cursor:pointer;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;transition:all .2s}
+.radio-label input{width:16px;height:16px;accent-color:#1a1a1a}
+.notice{background:#f9f9f9;border-left:3px solid #1a1a1a;border-radius:0 8px 8px 0;padding:12px 14px;font-size:12px;color:#555;line-height:1.7;margin-bottom:14px}
+.consent-box{border:1.5px solid #e0e0e0;border-radius:10px;padding:14px;margin-bottom:10px}
+.consent-box h4{font-size:13px;font-weight:600;margin-bottom:6px}
+.consent-box p{font-size:12px;color:#666;line-height:1.6;margin-bottom:10px}
+.consent-chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;cursor:pointer}
+.consent-chk input{width:18px;height:18px;accent-color:#1a1a1a}
+.btn-primary{width:100%;padding:16px;background:#1a1a1a;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s}
+.btn-primary:active{opacity:.8}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-back{padding:16px 22px;background:#fff;color:#1a1a1a;border:1.5px solid #e0e0e0;border-radius:12px;font-size:15px;cursor:pointer;font-family:inherit}
+.nav-row{display:flex;gap:10px;margin-top:8px}
+.nav-row .btn-primary{flex:1}
+.err{color:#e74c3c;font-size:12px;margin-top:8px;display:none}
+.done-page{text-align:center;padding:56px 20px}
+.done-check{width:72px;height:72px;background:#e8f5e9;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;color:#2e7d32}
+.done-title{font-size:22px;font-weight:700;margin-bottom:10px}
+.done-sub{font-size:14px;color:#666;line-height:1.9}
+.page{display:none}.page.active{display:block}
+.overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.88);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-size:15px;font-weight:500}
+.overlay.show{display:flex}
+.spinner{width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:#1a1a1a;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay"><div class="spinner"></div><div>送信中...</div></div>
+<div class="header"><h1>Voyage Nike</h1><p>新規お客様カルテ</p></div>
+<div class="container">
+<div class="step-bar" id="step-bar">
+<div class="step-item"><div class="step-circle active" id="sc0">1</div><div class="step-label active" id="sl0">基本情報</div></div>
+<div class="step-line" id="line0"></div>
+<div class="step-item"><div class="step-circle" id="sc1">2</div><div class="step-label" id="sl1">施術承諾</div></div>
+<div class="step-line" id="line1"></div>
+<div class="step-item"><div class="step-circle" id="sc2">3</div><div class="step-label" id="sl2">アレルギー</div></div>
+</div>
+<div class="page active" id="page0">
+<div class="card"><div class="card-title">基本情報</div>
+<div class="row2"><div class="field"><label>お名前<span class="req">*</span></label><input id="f_name" type="text" placeholder="山田 花子"></div><div class="field"><label>ふりがな</label><input id="f_kana" type="text" placeholder="やまだ はなこ"></div></div>
+<div class="row2"><div class="field"><label>生年月日</label><input id="f_dob" type="date"></div><div class="field"><label>性別</label><div class="radio-group" style="margin-top:6px"><label class="radio-label"><input type="radio" name="gender" value="女性"> 女性</label><label class="radio-label"><input type="radio" name="gender" value="男性"> 男性</label></div></div></div>
+<div class="field" style="margin-bottom:0"><label>電話番号<span class="req">*</span></label><input id="f_tel" type="tel" placeholder="090-0000-0000"></div>
+<div class="err" id="err0">お名前と電話番号は必須です。</div></div>
+<div class="card"><div class="card-title">来店のきっかけ</div><div class="chk-row"><label class="chk-label"><input type="checkbox" name="ref" value="ホットペッパービューティー"> HPB</label><label class="chk-label"><input type="checkbox" name="ref" value="Instagram/SNS"> SNS</label><label class="chk-label"><input type="checkbox" name="ref" value="ご紹介"> ご紹介</label><label class="chk-label"><input type="checkbox" name="ref" value="通りかかり"> 通りかかり</label></div></div>
+<div class="card"><div class="card-title">お悩み・ご要望</div><div class="field" style="margin-bottom:0"><textarea id="f_concern" placeholder="くせ毛が気になる、カラーしたい、エクステをつけたいなど、お気軽にご記入ください。"></textarea></div></div>
+<button class="btn-primary" onclick="next0()">次へ →</button></div>
+<div class="page" id="page1">
+<div class="notice">以下の内容をよくお読みいただき、各項目にご同意をお願いします。</div>
+<div class="consent-box"><h4>① パッチテスト・薬剤リスクについて</h4><p>カラーリング・パーマ・縮毛矯正などの薬剤による頭皮・肌への刺激、かぶれ、アレルギー反応が生じる可能性があります。初めての方にはパッチテスト（48時間前）を推奨しております。</p><label class="consent-chk"><input type="checkbox" id="c1"> 理解・同意します</label></div>
+<div class="consent-box"><h4>② 仕上がりのイメージ差異について</h4><p>髪の状態により、ご希望の仕上がりと異なる場合がございます。カウンセリング時に十分ご相談ください。</p><label class="consent-chk"><input type="checkbox" id="c2"> 理解・同意します</label></div>
+<div class="consent-box"><h4>③ 個人情報の取り扱いについて</h4><p>ご記入いただいた個人情報は施術管理にのみ使用し、第三者への提供は行いません。</p><label class="consent-chk"><input type="checkbox" id="c3"> 理解・同意します</label></div>
+<div class="err" id="err1">すべての項目にご同意をお願いします。</div>
+<div class="nav-row"><button class="btn-back" onclick="goPage(0)">←</button><button class="btn-primary" onclick="next1()">次へ →</button></div></div>
+<div class="page" id="page2">
+<div class="card"><div class="card-title">アレルギー確認</div>
+<div class="field"><label>アレルギーの有無<span class="req">*</span></label><div class="radio-group"><label class="radio-label"><input type="radio" name="al" value="なし" onchange="toggleAl(false)"> なし</label><label class="radio-label"><input type="radio" name="al" value="あり" onchange="toggleAl(true)"> あり</label><label class="radio-label"><input type="radio" name="al" value="不明" onchange="toggleAl(false)"> 不明</label></div></div>
+<div id="al-detail" style="display:none"><div class="field"><label>種類（複数可）</label><div class="chk-group"><label class="chk-label"><input type="checkbox" name="alt" value="ジアミン（カラー剤）"> ジアミン（カラー剤）</label><label class="chk-label"><input type="checkbox" name="alt" value="パーマ液・縮毛矯正剤"> パーマ液・縮毛矯正剤</label><label class="chk-label"><input type="checkbox" name="alt" value="ラテックス（手袋）"> ラテックス（手袋）</label><label class="chk-label"><input type="checkbox" name="alt" value="金属（ニッケル等）"> 金属（ニッケル等）</label><label class="chk-label"><input type="checkbox" name="alt" value="香料・フレグランス"> 香料・フレグランス</label></div></div><div class="field"><label>詳細・症状</label><textarea id="f_aldetail" placeholder="例：ジアミンでかぶれたことがある など"></textarea></div></div></div>
+<div class="card"><div class="card-title">頭皮・皮膚の状態</div><div class="chk-group"><label class="chk-label"><input type="checkbox" name="skin" value="頭皮に傷・炎症あり"> 頭皮に傷・炎症あり</label><label class="chk-label"><input type="checkbox" name="skin" value="アトピー性皮膚炎"> アトピー性皮膚炎</label><label class="chk-label"><input type="checkbox" name="skin" value="敏感肌・乾燥肌"> 敏感肌・乾燥肌</label><label class="chk-label"><input type="checkbox" name="skin" value="皮膚科の治療中"> 皮膚科の治療中（薬使用中）</label></div></div>
+<div class="card"><div class="card-title">過去の施術トラブル</div><div class="field" style="margin-bottom:0"><textarea id="f_trouble" placeholder="例：カラー後に頭皮が赤くなった（なければ空欄）"></textarea></div></div>
+<div class="err" id="err2">アレルギーの有無を選択してください。</div>
+<div class="nav-row"><button class="btn-back" onclick="goPage(1)">←</button><button class="btn-primary" id="submit-btn" onclick="submitForm()">送信する</button></div></div>
+<div class="page" id="page3"><div class="done-page"><div class="done-check">✓</div><div class="done-title">ありがとうございました</div><div class="done-sub">カルテの登録が完了しました。<br>スタッフがご案内するまで<br>少々お待ちください。</div></div></div>
+</div>
+<script>
+const SUPA_URL='https://uiwytympwslckwnzpygz.supabase.co';
+const SUPA_KEY='sb_publishable_WoZc1MkcvKkoCTQdSucQyQ_SZtbIngh';
+function goPage(n){document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i===n));updateSteps(n);window.scrollTo(0,0);}
+function updateSteps(cur){[0,1,2].forEach(i=>{const c=document.getElementById('sc'+i);const l=document.getElementById('sl'+i);c.className='step-circle'+(i<cur?' done':i===cur?' active':'');l.className='step-label'+(i===cur?' active':'');if(i<2)document.getElementById('line'+i).className='step-line'+(i<cur?' done':'');});}
+function toggleAl(show){document.getElementById('al-detail').style.display=show?'block':'none';}
+function next0(){const name=document.getElementById('f_name').value.trim();const tel=document.getElementById('f_tel').value.trim();const err=document.getElementById('err0');if(!name||!tel){err.style.display='block';return;}err.style.display='none';goPage(1);}
+function next1(){const err=document.getElementById('err1');if(![...document.querySelectorAll('#page1 input[type=checkbox]')].every(c=>c.checked)){err.style.display='block';return;}err.style.display='none';goPage(2);}
+async function submitForm(){const al=[...document.querySelectorAll('input[name=al]')].find(r=>r.checked);const err=document.getElementById('err2');if(!al){err.style.display='block';return;}err.style.display='none';document.getElementById('submit-btn').disabled=true;document.getElementById('overlay').classList.add('show');const gender=[...document.querySelectorAll('input[name=gender]')].find(r=>r.checked);const refs=[...document.querySelectorAll('input[name=ref]:checked')].map(r=>r.value);const altypes=[...document.querySelectorAll('input[name=alt]:checked')].map(r=>r.value);const skin=[...document.querySelectorAll('input[name=skin]:checked')].map(r=>r.value);const payload={name:document.getElementById('f_name').value.trim(),kana:document.getElementById('f_kana').value.trim()||null,dob:document.getElementById('f_dob').value||null,gender:gender?gender.value:null,tel:document.getElementById('f_tel').value.trim(),visit_date:new Date().toISOString().slice(0,10),refs:refs.length?refs.join('・'):null,concern:document.getElementById('f_concern').value.trim()||null,allergy:al.value,altypes:altypes.length?altypes.join('・'):null,skin:skin.length?skin.join('・'):null,trouble:document.getElementById('f_trouble').value.trim()||null,consent:document.getElementById('c1').checked&&document.getElementById('c2').checked&&document.getElementById('c3').checked,summary:null};try{const res=await fetch(SUPA_URL+'/rest/v1/cartes',{method:'POST',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(payload)});if(!res.ok)throw new Error(await res.text());document.getElementById('overlay').classList.remove('show');document.getElementById('step-bar').style.display='none';goPage(3);}catch(e){document.getElementById('overlay').classList.remove('show');document.getElementById('submit-btn').disabled=false;alert('送信に失敗しました。\n\nエラー: '+e.message);}}
+</script>
+</body>
+</html>
