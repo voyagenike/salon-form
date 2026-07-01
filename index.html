@@ -44,8 +44,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .consent-chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;cursor:pointer}
 .consent-chk input{width:20px;height:20px;accent-color:#1a1a1a;flex-shrink:0}
 .sign-area{background:#fff;border-radius:12px;padding:20px;margin-bottom:12px}
-.sign-title{font-size:11px;font-weight:600;color:#999;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em}
-.sign-canvas-wrap{border:1.5px solid #e0e0e0;border-radius:10px;overflow:hidden;background:#fff;margin-bottom:10px;position:relative}
+.sign-canvas-wrap{border:1.5px solid #e0e0e0;border-radius:10px;overflow:hidden;background:#fff;margin-bottom:10px}
 canvas#sign-canvas{display:block;width:100%;height:160px;touch-action:none;cursor:crosshair}
 .sign-note{font-size:11px;color:#aaa;text-align:center;margin-bottom:10px}
 .sign-clear{width:100%;padding:10px;background:none;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;color:#666;cursor:pointer;font-family:inherit}
@@ -178,9 +177,9 @@ canvas#sign-canvas{display:block;width:100%;height:160px;touch-action:none;curso
 <div class="page" id="page3">
 <div class="notice">上記の内容を確認のうえ、以下にご署名をお願いいたします。</div>
 <div class="sign-area">
-<div class="sign-title">お客様署名</div>
-<div class="sign-note">下の枠内に指でサインしてください</div>
-<div class="sign-canvas-wrap">
+<div class="card-title">お客様署名</div>
+<div class="sign-note" style="margin-top:10px">下の枠内に指でサインしてください</div>
+<div class="sign-canvas-wrap" style="margin-top:10px">
 <canvas id="sign-canvas"></canvas>
 </div>
 <button class="sign-clear" onclick="clearSign()">✕ 書き直す</button>
@@ -211,22 +210,22 @@ function initCanvas(){
   signCanvas=document.getElementById('sign-canvas');
   if(!signCanvas)return;
   const wrap=signCanvas.parentElement;
-  signCanvas.width=wrap.offsetWidth;
+  signCanvas.width=wrap.offsetWidth||300;
   signCanvas.height=160;
   signCtx=signCanvas.getContext('2d');
   signCtx.strokeStyle='#1a1a1a';
   signCtx.lineWidth=2.5;
   signCtx.lineCap='round';
   signCtx.lineJoin='round';
-  signCanvas.addEventListener('touchstart',e=>{e.preventDefault();signing=true;const t=e.touches[0];const r=signCanvas.getBoundingClientRect();signCtx.beginPath();signCtx.moveTo(t.clientX-r.left,t.clientY-r.top);},{passive:false});
-  signCanvas.addEventListener('touchmove',e=>{e.preventDefault();if(!signing)return;const t=e.touches[0];const r=signCanvas.getBoundingClientRect();signCtx.lineTo(t.clientX-r.left,t.clientY-r.top);signCtx.stroke();hasSigned=true;},{passive:false});
+  signCanvas.addEventListener('touchstart',e=>{e.preventDefault();signing=true;const t=e.touches[0];const r=signCanvas.getBoundingClientRect();const scaleX=signCanvas.width/r.width;const scaleY=signCanvas.height/r.height;signCtx.beginPath();signCtx.moveTo((t.clientX-r.left)*scaleX,(t.clientY-r.top)*scaleY);},{passive:false});
+  signCanvas.addEventListener('touchmove',e=>{e.preventDefault();if(!signing)return;const t=e.touches[0];const r=signCanvas.getBoundingClientRect();const scaleX=signCanvas.width/r.width;const scaleY=signCanvas.height/r.height;signCtx.lineTo((t.clientX-r.left)*scaleX,(t.clientY-r.top)*scaleY);signCtx.stroke();hasSigned=true;},{passive:false});
   signCanvas.addEventListener('touchend',()=>{signing=false;});
-  signCanvas.addEventListener('mousedown',e=>{signing=true;const r=signCanvas.getBoundingClientRect();signCtx.beginPath();signCtx.moveTo(e.clientX-r.left,e.clientY-r.top);});
-  signCanvas.addEventListener('mousemove',e=>{if(!signing)return;const r=signCanvas.getBoundingClientRect();signCtx.lineTo(e.clientX-r.left,e.clientY-r.top);signCtx.stroke();hasSigned=true;});
+  signCanvas.addEventListener('mousedown',e=>{signing=true;const r=signCanvas.getBoundingClientRect();const scaleX=signCanvas.width/r.width;const scaleY=signCanvas.height/r.height;signCtx.beginPath();signCtx.moveTo((e.clientX-r.left)*scaleX,(e.clientY-r.top)*scaleY);});
+  signCanvas.addEventListener('mousemove',e=>{if(!signing)return;const r=signCanvas.getBoundingClientRect();const scaleX=signCanvas.width/r.width;const scaleY=signCanvas.height/r.height;signCtx.lineTo((e.clientX-r.left)*scaleX,(e.clientY-r.top)*scaleY);signCtx.stroke();hasSigned=true;});
   signCanvas.addEventListener('mouseup',()=>{signing=false;});
 }
 
-function clearSign(){signCtx.clearRect(0,0,signCanvas.width,signCanvas.height);hasSigned=false;}
+function clearSign(){if(signCtx)signCtx.clearRect(0,0,signCanvas.width,signCanvas.height);hasSigned=false;}
 
 function selGender(v){selectedGender=v;document.getElementById('g_f').classList.toggle('selected',v==='女性');document.getElementById('g_m').classList.toggle('selected',v==='男性');}
 function selAl(v){selectedAl=v;document.getElementById('al_none').classList.toggle('selected',v==='なし');document.getElementById('al_yes').classList.toggle('selected',v==='あり');document.getElementById('al_unk').classList.toggle('selected',v==='不明');document.getElementById('al-detail').style.display=v==='あり'?'block':'none';}
@@ -279,7 +278,8 @@ async function submitForm(){
     skin:skin.length?skin.join('・'):null,
     trouble:document.getElementById('f_trouble').value.trim()||null,
     consent:true,
-    summary:signData
+    signature:signData,
+    summary:null
   };
   try{
     const res=await fetch(SUPA_URL+'/rest/v1/cartes',{method:'POST',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(payload)});
