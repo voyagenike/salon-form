@@ -132,4 +132,71 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 <div class="card-title">アレルギー確認</div>
 <div class="field">
 <label>アレルギーの有無<span class="req">*</span></label>
-<d
+<div class="sel-group3">
+<button type="button" class="sel-btn" id="al_none" onclick="selAl('なし')">なし</button>
+<button type="button" class="sel-btn" id="al_yes" onclick="selAl('あり')">あり</button>
+<button type="button" class="sel-btn" id="al_unk" onclick="selAl('不明')">不明</button>
+</div>
+</div>
+<div id="al-detail" style="display:none">
+<div class="field"><label>種類（複数可）</label>
+<div class="tog-group">
+<button type="button" class="tog-btn" id="alt_1" onclick="togAlt('alt_1','ジアミン（カラー剤）')"><span class="tog-icon"></span>ジアミン（カラー剤）</button>
+<button type="button" class="tog-btn" id="alt_2" onclick="togAlt('alt_2','パーマ液・縮毛矯正剤')"><span class="tog-icon"></span>パーマ液・縮毛矯正剤</button>
+<button type="button" class="tog-btn" id="alt_3" onclick="togAlt('alt_3','ラテックス（手袋）')"><span class="tog-icon"></span>ラテックス（手袋）</button>
+<button type="button" class="tog-btn" id="alt_4" onclick="togAlt('alt_4','金属（ニッケル等）')"><span class="tog-icon"></span>金属（ニッケル等）</button>
+<button type="button" class="tog-btn" id="alt_5" onclick="togAlt('alt_5','香料・フレグランス')"><span class="tog-icon"></span>香料・フレグランス</button>
+</div>
+</div>
+<div class="field"><label>詳細・症状</label><textarea id="f_aldetail" placeholder="例：ジアミンでかぶれたことがある など"></textarea></div>
+</div>
+</div>
+<div class="card">
+<div class="card-title">頭皮・皮膚の状態</div>
+<div class="tog-group">
+<button type="button" class="tog-btn" id="sk_1" onclick="togSkin('sk_1','頭皮に傷・炎症あり')"><span class="tog-icon"></span>頭皮に傷・炎症あり</button>
+<button type="button" class="tog-btn" id="sk_2" onclick="togSkin('sk_2','アトピー性皮膚炎')"><span class="tog-icon"></span>アトピー性皮膚炎</button>
+<button type="button" class="tog-btn" id="sk_3" onclick="togSkin('sk_3','敏感肌・乾燥肌')"><span class="tog-icon"></span>敏感肌・乾燥肌</button>
+<button type="button" class="tog-btn" id="sk_4" onclick="togSkin('sk_4','皮膚科の治療中')"><span class="tog-icon"></span>皮膚科の治療中（薬使用中）</button>
+</div>
+</div>
+<div class="card">
+<div class="card-title">過去の施術トラブル</div>
+<div class="field" style="margin-bottom:0"><textarea id="f_trouble" placeholder="例：カラー後に頭皮が赤くなった（なければ空欄）"></textarea></div>
+</div>
+<div class="err" id="err2">アレルギーの有無を選択してください。</div>
+<div class="nav-row"><button class="btn-back" onclick="goPage(1)">←</button><button class="btn-primary" id="submit-btn" onclick="submitForm()">送信する</button></div>
+</div>
+
+<!-- 完了 -->
+<div class="page" id="page3">
+<div class="done-page">
+<div class="done-check">✓</div>
+<div class="done-title">ありがとうございました</div>
+<div class="done-sub">カルテの登録が完了しました。<br>スタッフがご案内するまで<br>少々お待ちください。</div>
+</div>
+</div>
+</div>
+
+<script>
+const SUPA_URL='https://uiwytympwslckwnzpygz.supabase.co';
+const SUPA_KEY='sb_publishable_WoZc1MkcvKkoCTQdSucQyQ_SZtbIngh';
+let selectedGender='';
+let selectedAl='';
+const refMap={};
+const altMap={};
+const skinMap={};
+
+function selGender(v){selectedGender=v;document.getElementById('g_f').classList.toggle('selected',v==='女性');document.getElementById('g_m').classList.toggle('selected',v==='男性');}
+function selAl(v){selectedAl=v;['al_none','al_yes','al_unk'].forEach(id=>document.getElementById(id).classList.remove('selected'));document.getElementById(v==='なし'?'al_none':v==='あり'?'al_yes':'al_unk').classList.add('selected');document.getElementById('al-detail').style.display=v==='あり'?'block':'none';}
+function togRef(id,v){refMap[v]=!refMap[v];const btn=document.getElementById(id);btn.classList.toggle('selected',refMap[v]);btn.querySelector('.tog-icon').textContent=refMap[v]?'✓':'';}
+function togAlt(id,v){altMap[v]=!altMap[v];const btn=document.getElementById(id);btn.classList.toggle('selected',altMap[v]);btn.querySelector('.tog-icon').textContent=altMap[v]?'✓':'';}
+function togSkin(id,v){skinMap[v]=!skinMap[v];const btn=document.getElementById(id);btn.classList.toggle('selected',skinMap[v]);btn.querySelector('.tog-icon').textContent=skinMap[v]?'✓':'';}
+function goPage(n){document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i===n));updateSteps(n);window.scrollTo(0,0);}
+function updateSteps(cur){[0,1,2].forEach(i=>{const c=document.getElementById('sc'+i);const l=document.getElementById('sl'+i);c.className='step-circle'+(i<cur?' done':i===cur?' active':'');l.className='step-label'+(i===cur?' active':'');if(i<2)document.getElementById('line'+i).className='step-line'+(i<cur?' done':'');});}
+function next0(){const name=document.getElementById('f_name').value.trim();const tel=document.getElementById('f_tel').value.trim();const err=document.getElementById('err0');if(!name||!tel){err.style.display='block';return;}err.style.display='none';goPage(1);}
+function next1(){const err=document.getElementById('err1');const boxes=[...document.querySelectorAll('#page1 input[type=checkbox]')];if(!boxes.every(c=>c.checked)){err.style.display='block';return;}err.style.display='none';goPage(2);}
+async function submitForm(){const err=document.getElementById('err2');if(!selectedAl){err.style.display='block';return;}err.style.display='none';document.getElementById('submit-btn').disabled=true;document.getElementById('overlay').classList.add('show');const refs=Object.keys(refMap).filter(k=>refMap[k]);const altypes=Object.keys(altMap).filter(k=>altMap[k]);const skin=Object.keys(skinMap).filter(k=>skinMap[k]);const payload={name:document.getElementById('f_name').value.trim(),kana:document.getElementById('f_kana').value.trim()||null,dob:document.getElementById('f_dob').value||null,gender:selectedGender||null,tel:document.getElementById('f_tel').value.trim(),visit_date:new Date().toISOString().slice(0,10),refs:refs.length?refs.join('・'):null,concern:document.getElementById('f_concern').value.trim()||null,allergy:selectedAl,altypes:altypes.length?altypes.join('・'):null,skin:skin.length?skin.join('・'):null,trouble:document.getElementById('f_trouble').value.trim()||null,consent:true,summary:null};try{const res=await fetch(SUPA_URL+'/rest/v1/cartes',{method:'POST',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(payload)});if(!res.ok)throw new Error(await res.text());document.getElementById('overlay').classList.remove('show');document.getElementById('step-bar').style.display='none';goPage(3);}catch(e){document.getElementById('overlay').classList.remove('show');document.getElementById('submit-btn').disabled=false;alert('送信に失敗しました。\n\nエラー: '+e.message);}}
+</script>
+</body>
+</html>
