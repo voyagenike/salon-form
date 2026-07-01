@@ -12,8 +12,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .header h1{font-size:16px;font-weight:600;flex:1}
 .btn{background:none;border:1px solid #ddd;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;color:#1a1a1a;display:inline-flex;align-items:center;gap:5px;font-family:inherit}
 .btn:hover{background:#f0f0f0}
-.btn-white{background:#fff;border-color:#fff;color:#1a1a1a}
-.btn-print{background:#fff;color:#1a1a1a;border:none;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:500}
+.btn-black{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.btn-black:hover{opacity:.85}
+.btn-hdr{background:#fff;color:#1a1a1a;border:none;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:500}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
 .stat{background:#fff;border-radius:10px;padding:12px 16px;border:1px solid #eee}
 .stat-lbl{font-size:11px;color:#888;margin-bottom:4px}
@@ -35,17 +36,15 @@ tr:hover td{background:#fafafa;cursor:pointer}
 .dl{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;font-size:13px;margin-bottom:1rem}
 .dl dt{color:#888;font-weight:500}
 .ai-box{background:#f9f9f9;border-radius:8px;padding:12px;margin-top:4px}
-.ai-lbl{font-size:12px;font-weight:600;margin-bottom:6px;color:#444}
-.ai-txt{font-size:13px;line-height:1.7;color:#1a1a1a}
+.sign-preview{border:1px solid #eee;border-radius:8px;padding:8px;background:#fff;margin-top:6px}
+.sign-preview img{max-width:200px;height:60px;object-fit:contain;display:block}
 .spinner{display:inline-block;width:13px;height:13px;border:2px solid #ddd;border-top-color:#1a1a1a;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media print{
   body{background:#fff}
   .no-print{display:none!important}
-  .print-only{display:block!important}
-  #print-area{display:block!important}
-  body > *{display:none}
-  #print-area{display:block;position:fixed;top:0;left:0;width:100%;padding:20px;font-family:'Hiragino Sans',sans-serif}
+  body>*{display:none}
+  #print-area{display:block!important;position:fixed;top:0;left:0;width:100%;padding:20px;font-family:'Hiragino Sans',sans-serif}
   .ph{text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #000}
   .ph h1{font-size:18px;font-weight:700;margin-bottom:3px}
   .ph p{font-size:10px;color:#555}
@@ -56,9 +55,10 @@ tr:hover td{background:#fafafa;cursor:pointer}
   .pc{margin-bottom:5px;font-size:10px;padding:5px 7px;background:#f9f9f9;border-radius:3px}
   .pc-t{font-weight:600;margin-bottom:2px;font-size:11px}
   .pc-p{color:#555;line-height:1.5}
-  .psign{margin-top:16px;padding-top:12px;border-top:1px solid #000;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  .psign-box{border-bottom:1px solid #000;padding-bottom:28px}
+  .psign{margin-top:14px;padding-top:10px;border-top:1px solid #000;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  .psign-box{border-bottom:1px solid #000;padding-bottom:10px}
   .psign-lbl{font-size:10px;color:#555;margin-bottom:6px}
+  .psign-img{max-width:100%;height:50px;object-fit:contain}
   .pfoot{margin-top:12px;text-align:center;font-size:9px;color:#888;border-top:0.5px solid #ccc;padding-top:6px}
 }
 </style>
@@ -70,8 +70,8 @@ tr:hover td{background:#fafafa;cursor:pointer}
 <div class="wrap no-print">
 <div class="header">
   <h1>📋 Voyage Nike　スタッフ管理</h1>
-  <button class="btn-print" onclick="loadRecords()">🔄 更新</button>
-  <button class="btn-print" onclick="exportCSV()">⬇ CSV</button>
+  <button class="btn-hdr" onclick="loadRecords()">🔄 更新</button>
+  <button class="btn-hdr" onclick="exportCSV()">⬇ CSV</button>
 </div>
 
 <div class="status">
@@ -93,8 +93,9 @@ tr:hover td{background:#fafafa;cursor:pointer}
     <th style="width:80px">受付日時</th>
     <th style="width:80px">アレルギー</th>
     <th style="width:60px">承諾</th>
+    <th style="width:60px">署名</th>
   </tr></thead>
-  <tbody id="tbody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:#888"><span class="spinner"></span> 読み込み中...</td></tr></tbody>
+  <tbody id="tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:#888"><span class="spinner"></span> 読み込み中...</td></tr></tbody>
 </table>
 </div>
 
@@ -132,13 +133,14 @@ async function loadRecords(){
 
 function renderTable(){
   const tb=document.getElementById('tbody');
-  if(!allRecords.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:#888">データがありません</td></tr>';return;}
+  if(!allRecords.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#888">データがありません</td></tr>';return;}
   tb.innerHTML=allRecords.map(r=>`<tr onclick="showDetail('${r.id}')">
     <td style="font-weight:600">${r.name}</td>
     <td>${r.tel}</td>
     <td style="font-size:11px;color:#888">${r.created_at?new Date(r.created_at).toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—'}</td>
     <td>${r.allergy==='あり'?'<span class="tag tag-warn">⚠ あり</span>':r.allergy==='不明'?'<span class="tag tag-info">不明</span>':'<span class="tag tag-ok">なし</span>'}</td>
     <td>${r.consent?'<span class="tag tag-ok">済み</span>':'<span class="tag tag-warn">未完</span>'}</td>
+    <td>${r.signature?'<span class="tag tag-ok">あり</span>':'<span style="color:#aaa;font-size:11px">なし</span>'}</td>
   </tr>`).join('');
 }
 
@@ -152,7 +154,7 @@ function showDetail(id){
       <div style="font-size:16px;font-weight:700">${r.name}</div>
       <div style="font-size:12px;color:#888;margin-top:2px">${r.kana||''} ／ ${r.gender||'性別未選択'} ／ ${r.dob||'生年月日未記入'}</div>
     </div>
-    <button class="btn" style="margin-left:auto;background:#1a1a1a;color:#fff;border-color:#1a1a1a" onclick="printCarte('${r.id}')">🖨 印刷</button>
+    <button class="btn btn-black" style="margin-left:auto" onclick="printCarte('${r.id}')">🖨 印刷</button>
   </div>
   <dl class="dl">
     <dt>電話番号</dt><dd>${r.tel}</dd>
@@ -163,10 +165,11 @@ function showDetail(id){
     <dt>頭皮・皮膚</dt><dd>${r.skin||'問題なし'}</dd>
     <dt>過去トラブル</dt><dd>${r.trouble||'なし'}</dd>
     <dt>施術承諾</dt><dd>${r.consent?'<span class="tag tag-ok">✓ 全項目同意</span>':'<span class="tag tag-warn">未同意あり</span>'}</dd>
+    <dt>署名</dt><dd>${r.signature?`<div class="sign-preview"><img src="${r.signature}" alt="署名"></div>`:'未署名'}</dd>
   </dl>
   <div class="ai-box">
-    <div class="ai-lbl">✨ AI要約 <span id="ai-spin" style="display:none" class="spinner"></span></div>
-    <div class="ai-txt" id="ai-txt">${r.summary||'<span style="color:#aaa">未生成</span>'}</div>
+    <div style="font-size:12px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px">✨ AI要約 <span id="ai-spin" style="display:none" class="spinner"></span></div>
+    <div style="font-size:12px;line-height:1.7" id="ai-txt">${r.summary||'<span style="color:#aaa">未生成</span>'}</div>
     <button class="btn" style="margin-top:8px;font-size:12px" onclick="genAI('${r.id}')">${r.summary?'再生成':'AI要約を生成'}</button>
   </div>
 </div>`;
@@ -201,8 +204,11 @@ function printCarte(id){
 <div class="pc"><div class="pc-t">⑦ 個人情報の取り扱いについて</div><div class="pc-p">ご記入いただいた個人情報は、施術管理・サービス向上の目的にのみ使用し、第三者への提供は行いません。</div></div>
 <div style="margin-top:8px;font-size:11px;font-weight:700">承諾状況：${r.consent?'✓ 全項目同意済み':'未同意あり'}</div></div>
 <div class="psign">
-<div class="psign-box"><div class="psign-lbl">お客様署名</div></div>
-<div class="psign-box"><div class="psign-lbl">日付：　　年　　月　　日</div></div>
+  <div class="psign-box">
+    <div class="psign-lbl">お客様署名</div>
+    ${r.signature?`<img class="psign-img" src="${r.signature}" alt="署名">`:'<div style="height:50px"></div>'}
+  </div>
+  <div class="psign-box"><div class="psign-lbl">日付：${r.visit_date||'　　年　　月　　日'}</div></div>
 </div>
 <div class="pfoot">株式会社 voyage　〒171-0014 東京都豊島区池袋2-18-1 山鹿ビル2階　TEL 03-6914-3118</div>`;
   pa.style.display='block';
@@ -227,8 +233,8 @@ async function genAI(id){
 
 function exportCSV(){
   if(!allRecords.length){alert('データがありません。');return;}
-  const h=['氏名','ふりがな','性別','生年月日','電話番号','来店日','来店きっかけ','お悩み','アレルギー','アレルギー詳細','頭皮・皮膚','過去トラブル','承諾','AI要約'];
-  const rows=allRecords.map(r=>[r.name,r.kana||'',r.gender||'',r.dob||'',r.tel,r.visit_date||'',r.refs||'',r.concern||'',r.allergy||'',r.altypes||'',r.skin||'',r.trouble||'',r.consent?'同意':'未同意',r.summary||''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const h=['氏名','ふりがな','性別','生年月日','電話番号','来店日','来店きっかけ','お悩み','アレルギー','アレルギー詳細','頭皮・皮膚','過去トラブル','承諾','署名','AI要約'];
+  const rows=allRecords.map(r=>[r.name,r.kana||'',r.gender||'',r.dob||'',r.tel,r.visit_date||'',r.refs||'',r.concern||'',r.allergy||'',r.altypes||'',r.skin||'',r.trouble||'',r.consent?'同意':'未同意',r.signature?'あり':'なし',r.summary||''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
   const csv='\uFEFF'+[h.map(v=>`"${v}"`).join(','),...rows].join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
