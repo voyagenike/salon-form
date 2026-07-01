@@ -29,20 +29,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .field input:focus,.field textarea:focus{outline:none;border-color:#1a1a1a}
 .field textarea{resize:none;min-height:72px;line-height:1.6}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.chk-group{display:flex;flex-direction:column;gap:8px}
-.chk-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.chk-label{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;transition:all .2s;width:100%}
-.chk-label input{width:16px;height:16px;accent-color:#1a1a1a;flex-shrink:0}
 .sel-group{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
-.sel-btn{padding:12px 8px;border:1.5px solid #e0e0e0;border-radius:10px;background:#fff;font-size:15px;font-family:inherit;color:#1a1a1a;cursor:pointer;text-align:center;transition:all .2s;-webkit-appearance:none}
-.sel-btn.selected{border-color:#1a1a1a;background:#1a1a1a;color:#fff;font-weight:600}
 .sel-group3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px}
+.sel-btn{padding:13px 8px;border:1.5px solid #e0e0e0;border-radius:10px;background:#fff;font-size:15px;font-family:inherit;color:#1a1a1a;cursor:pointer;text-align:center;transition:all .2s;-webkit-appearance:none;width:100%}
+.sel-btn.selected{border-color:#1a1a1a;background:#1a1a1a;color:#fff;font-weight:600}
+.tog-group{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.tog-btn{width:100%;padding:13px 16px;border:1.5px solid #e0e0e0;border-radius:10px;background:#fff;font-size:14px;font-family:inherit;color:#1a1a1a;cursor:pointer;text-align:left;transition:all .2s;-webkit-appearance:none;display:flex;align-items:center;gap:10px}
+.tog-btn.selected{border-color:#1a1a1a;background:#1a1a1a;color:#fff}
+.tog-icon{width:20px;height:20px;border-radius:4px;border:1.5px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:#fff}
+.tog-btn.selected .tog-icon{background:#fff;border-color:#fff;color:#1a1a1a}
+.chk-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .notice{background:#f9f9f9;border-left:3px solid #1a1a1a;border-radius:0 8px 8px 0;padding:12px 14px;font-size:12px;color:#555;line-height:1.7;margin-bottom:14px}
 .consent-box{border:1.5px solid #e0e0e0;border-radius:10px;padding:14px;margin-bottom:10px}
 .consent-box h4{font-size:13px;font-weight:600;margin-bottom:6px}
 .consent-box p{font-size:12px;color:#666;line-height:1.6;margin-bottom:10px}
 .consent-chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;cursor:pointer}
-.consent-chk input{width:18px;height:18px;accent-color:#1a1a1a}
+.consent-chk input{width:20px;height:20px;accent-color:#1a1a1a;flex-shrink:0}
 .btn-primary{width:100%;padding:16px;background:#1a1a1a;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s}
 .btn-primary:active{opacity:.8}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed}
@@ -95,11 +97,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 </div>
 <div class="card">
 <div class="card-title">来店のきっかけ</div>
-<div class="chk-group">
-<label class="chk-label"><input type="checkbox" name="ref" value="ホットペッパービューティー"> ホットペッパービューティー</label>
-<label class="chk-label"><input type="checkbox" name="ref" value="Instagram/SNS"> Instagram / SNS</label>
-<label class="chk-label"><input type="checkbox" name="ref" value="ご紹介"> ご友人・ご家族のご紹介</label>
-<label class="chk-label"><input type="checkbox" name="ref" value="通りかかり"> 近くを通りかかって</label>
+<div class="tog-group">
+<button type="button" class="tog-btn" id="ref_hpb" onclick="togRef('ref_hpb','ホットペッパービューティー')"><span class="tog-icon"></span>ホットペッパービューティー</button>
+<button type="button" class="tog-btn" id="ref_sns" onclick="togRef('ref_sns','Instagram/SNS')"><span class="tog-icon"></span>Instagram / SNS</button>
+<button type="button" class="tog-btn" id="ref_int" onclick="togRef('ref_int','ご紹介')"><span class="tog-icon"></span>ご友人・ご家族のご紹介</button>
+<button type="button" class="tog-btn" id="ref_walk" onclick="togRef('ref_walk','通りかかり')"><span class="tog-icon"></span>近くを通りかかって</button>
 </div>
 </div>
 <div class="card">
@@ -130,129 +132,4 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 <div class="card-title">アレルギー確認</div>
 <div class="field">
 <label>アレルギーの有無<span class="req">*</span></label>
-<div class="sel-group3">
-<button type="button" class="sel-btn" id="al_none" onclick="selAl('なし')">なし</button>
-<button type="button" class="sel-btn" id="al_yes" onclick="selAl('あり')">あり</button>
-<button type="button" class="sel-btn" id="al_unk" onclick="selAl('不明')">不明</button>
-</div>
-</div>
-<div id="al-detail" style="display:none">
-<div class="field"><label>種類（複数可）</label>
-<div class="chk-group">
-<label class="chk-label"><input type="checkbox" name="alt" value="ジアミン（カラー剤）"> ジアミン（カラー剤）</label>
-<label class="chk-label"><input type="checkbox" name="alt" value="パーマ液・縮毛矯正剤"> パーマ液・縮毛矯正剤</label>
-<label class="chk-label"><input type="checkbox" name="alt" value="ラテックス（手袋）"> ラテックス（手袋）</label>
-<label class="chk-label"><input type="checkbox" name="alt" value="金属（ニッケル等）"> 金属（ニッケル等）</label>
-<label class="chk-label"><input type="checkbox" name="alt" value="香料・フレグランス"> 香料・フレグランス</label>
-</div>
-</div>
-<div class="field"><label>詳細・症状</label><textarea id="f_aldetail" placeholder="例：ジアミンでかぶれたことがある など"></textarea></div>
-</div>
-</div>
-<div class="card">
-<div class="card-title">頭皮・皮膚の状態</div>
-<div class="chk-group">
-<label class="chk-label"><input type="checkbox" name="skin" value="頭皮に傷・炎症あり"> 頭皮に傷・炎症あり</label>
-<label class="chk-label"><input type="checkbox" name="skin" value="アトピー性皮膚炎"> アトピー性皮膚炎</label>
-<label class="chk-label"><input type="checkbox" name="skin" value="敏感肌・乾燥肌"> 敏感肌・乾燥肌</label>
-<label class="chk-label"><input type="checkbox" name="skin" value="皮膚科の治療中"> 皮膚科の治療中（薬使用中）</label>
-</div>
-</div>
-<div class="card">
-<div class="card-title">過去の施術トラブル</div>
-<div class="field" style="margin-bottom:0"><textarea id="f_trouble" placeholder="例：カラー後に頭皮が赤くなった（なければ空欄）"></textarea></div>
-</div>
-<div class="err" id="err2">アレルギーの有無を選択してください。</div>
-<div class="nav-row"><button class="btn-back" onclick="goPage(1)">←</button><button class="btn-primary" id="submit-btn" onclick="submitForm()">送信する</button></div>
-</div>
-
-<!-- 完了 -->
-<div class="page" id="page3">
-<div class="done-page">
-<div class="done-check">✓</div>
-<div class="done-title">ありがとうございました</div>
-<div class="done-sub">カルテの登録が完了しました。<br>スタッフがご案内するまで<br>少々お待ちください。</div>
-</div>
-</div>
-</div>
-
-<script>
-const SUPA_URL='https://uiwytympwslckwnzpygz.supabase.co';
-const SUPA_KEY='sb_publishable_WoZc1MkcvKkoCTQdSucQyQ_SZtbIngh';
-let selectedGender='';
-let selectedAl='';
-
-function selGender(v){
-  selectedGender=v;
-  document.getElementById('g_f').classList.toggle('selected',v==='女性');
-  document.getElementById('g_m').classList.toggle('selected',v==='男性');
-}
-
-function selAl(v){
-  selectedAl=v;
-  document.getElementById('al_none').classList.toggle('selected',v==='なし');
-  document.getElementById('al_yes').classList.toggle('selected',v==='あり');
-  document.getElementById('al_unk').classList.toggle('selected',v==='不明');
-  document.getElementById('al-detail').style.display=v==='あり'?'block':'none';
-}
-
-function goPage(n){document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i===n));updateSteps(n);window.scrollTo(0,0);}
-function updateSteps(cur){[0,1,2].forEach(i=>{const c=document.getElementById('sc'+i);const l=document.getElementById('sl'+i);c.className='step-circle'+(i<cur?' done':i===cur?' active':'');l.className='step-label'+(i===cur?' active':'');if(i<2)document.getElementById('line'+i).className='step-line'+(i<cur?' done':'');});}
-
-function next0(){
-  const name=document.getElementById('f_name').value.trim();
-  const tel=document.getElementById('f_tel').value.trim();
-  const err=document.getElementById('err0');
-  if(!name||!tel){err.style.display='block';return;}
-  err.style.display='none';
-  goPage(1);
-}
-
-function next1(){
-  const err=document.getElementById('err1');
-  const boxes=[...document.querySelectorAll('#page1 input[type=checkbox]')];
-  if(!boxes.every(c=>c.checked)){err.style.display='block';return;}
-  err.style.display='none';
-  goPage(2);
-}
-
-async function submitForm(){
-  const err=document.getElementById('err2');
-  if(!selectedAl){err.style.display='block';return;}
-  err.style.display='none';
-  document.getElementById('submit-btn').disabled=true;
-  document.getElementById('overlay').classList.add('show');
-  const refs=[...document.querySelectorAll('input[name=ref]:checked')].map(r=>r.value);
-  const altypes=[...document.querySelectorAll('input[name=alt]:checked')].map(r=>r.value);
-  const skin=[...document.querySelectorAll('input[name=skin]:checked')].map(r=>r.value);
-  const payload={
-    name:document.getElementById('f_name').value.trim(),
-    kana:document.getElementById('f_kana').value.trim()||null,
-    dob:document.getElementById('f_dob').value||null,
-    gender:selectedGender||null,
-    tel:document.getElementById('f_tel').value.trim(),
-    visit_date:new Date().toISOString().slice(0,10),
-    refs:refs.length?refs.join('・'):null,
-    concern:document.getElementById('f_concern').value.trim()||null,
-    allergy:selectedAl,
-    altypes:altypes.length?altypes.join('・'):null,
-    skin:skin.length?skin.join('・'):null,
-    trouble:document.getElementById('f_trouble').value.trim()||null,
-    consent:true,
-    summary:null
-  };
-  try{
-    const res=await fetch(SUPA_URL+'/rest/v1/cartes',{method:'POST',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(payload)});
-    if(!res.ok)throw new Error(await res.text());
-    document.getElementById('overlay').classList.remove('show');
-    document.getElementById('step-bar').style.display='none';
-    goPage(3);
-  }catch(e){
-    document.getElementById('overlay').classList.remove('show');
-    document.getElementById('submit-btn').disabled=false;
-    alert('送信に失敗しました。\n\nエラー: '+e.message);
-  }
-}
-</script>
-</body>
-</html>
+<d
