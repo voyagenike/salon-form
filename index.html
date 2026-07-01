@@ -2,201 +2,240 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Voyage Nike｜新規カルテ受付</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voyage Nike｜スタッフ管理</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#f5f5f5;color:#1a1a1a;min-height:100vh}
-.header{background:#fff;padding:16px 20px;text-align:center;border-bottom:1px solid #eee}
-.header h1{font-size:17px;font-weight:600;letter-spacing:.06em}
-.header p{font-size:12px;color:#888;margin-top:3px}
-.container{max-width:480px;margin:0 auto;padding:16px}
-.step-bar{display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-.step-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
-.step-circle{width:28px;height:28px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#aaa;background:#fff;transition:all .3s}
-.step-circle.active{border-color:#1a1a1a;color:#1a1a1a}
-.step-circle.done{border-color:#1a1a1a;background:#1a1a1a;color:#fff}
-.step-label{font-size:10px;color:#aaa}
-.step-label.active{color:#1a1a1a;font-weight:500}
-.step-line{height:2px;background:#ddd;flex:1;margin-top:13px}
-.step-line.done{background:#1a1a1a}
-.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:12px}
-.card-title{font-size:11px;font-weight:600;color:#999;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:13px;font-weight:500;color:#444;margin-bottom:6px}
-.req{color:#e74c3c;margin-left:2px}
-.field input,.field textarea{width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:16px;font-family:inherit;background:#fff;color:#1a1a1a;-webkit-appearance:none;appearance:none}
-.field input:focus,.field textarea:focus{outline:none;border-color:#1a1a1a}
-.field textarea{resize:none;min-height:72px;line-height:1.6}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.sel-group{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
-.sel-group3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px}
-.sel-btn{padding:13px 8px;border:1.5px solid #e0e0e0;border-radius:10px;background:#fff;font-size:15px;font-family:inherit;color:#1a1a1a;cursor:pointer;text-align:center;transition:all .2s;-webkit-appearance:none;width:100%}
-.sel-btn.selected{border-color:#1a1a1a;background:#1a1a1a;color:#fff;font-weight:600}
-.tog-group{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-.tog-btn{width:100%;padding:13px 16px;border:1.5px solid #e0e0e0;border-radius:10px;background:#fff;font-size:14px;font-family:inherit;color:#1a1a1a;cursor:pointer;text-align:left;transition:all .2s;-webkit-appearance:none;display:flex;align-items:center;gap:10px}
-.tog-btn.selected{border-color:#1a1a1a;background:#1a1a1a;color:#fff}
-.tog-icon{width:20px;height:20px;border-radius:4px;border:1.5px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:#fff}
-.tog-btn.selected .tog-icon{background:#fff;border-color:#fff;color:#1a1a1a}
-.chk-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.notice{background:#f9f9f9;border-left:3px solid #1a1a1a;border-radius:0 8px 8px 0;padding:12px 14px;font-size:12px;color:#555;line-height:1.7;margin-bottom:14px}
-.consent-box{border:1.5px solid #e0e0e0;border-radius:10px;padding:14px;margin-bottom:10px}
-.consent-box h4{font-size:13px;font-weight:600;margin-bottom:6px}
-.consent-box p{font-size:12px;color:#666;line-height:1.6;margin-bottom:10px}
-.consent-chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;cursor:pointer}
-.consent-chk input{width:20px;height:20px;accent-color:#1a1a1a;flex-shrink:0}
-.btn-primary{width:100%;padding:16px;background:#1a1a1a;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s}
-.btn-primary:active{opacity:.8}
-.btn-primary:disabled{opacity:.4;cursor:not-allowed}
-.btn-back{padding:16px 22px;background:#fff;color:#1a1a1a;border:1.5px solid #e0e0e0;border-radius:12px;font-size:15px;cursor:pointer;font-family:inherit}
-.nav-row{display:flex;gap:10px;margin-top:8px}
-.nav-row .btn-primary{flex:1}
-.err{color:#e74c3c;font-size:12px;margin-top:8px;display:none}
-.done-page{text-align:center;padding:56px 20px}
-.done-check{width:72px;height:72px;background:#e8f5e9;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;color:#2e7d32}
-.done-title{font-size:22px;font-weight:700;margin-bottom:10px}
-.done-sub{font-size:14px;color:#666;line-height:1.9}
-.page{display:none}.page.active{display:block}
-.overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.88);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-size:15px;font-weight:500}
-.overlay.show{display:flex}
-.spinner{width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:#1a1a1a;border-radius:50%;animation:spin .7s linear infinite}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP',sans-serif;background:#f5f5f5;color:#1a1a1a;font-size:14px}
+.wrap{max-width:900px;margin:0 auto;padding:1rem}
+.header{background:#1a1a1a;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;margin-bottom:1rem;border-radius:10px}
+.header h1{font-size:16px;font-weight:600;flex:1}
+.btn{background:none;border:1px solid #ddd;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;color:#1a1a1a;display:inline-flex;align-items:center;gap:5px;font-family:inherit}
+.btn:hover{background:#f0f0f0}
+.btn-white{background:#fff;border-color:#fff;color:#1a1a1a}
+.btn-print{background:#fff;color:#1a1a1a;border:none;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
+.stat{background:#fff;border-radius:10px;padding:12px 16px;border:1px solid #eee}
+.stat-lbl{font-size:11px;color:#888;margin-bottom:4px}
+.stat-val{font-size:24px;font-weight:600}
+.status{display:flex;align-items:center;gap:8px;font-size:12px;color:#666;margin-bottom:1rem;padding:8px 12px;background:#fff;border-radius:8px;border:1px solid #eee}
+.dot{width:7px;height:7px;border-radius:50%;background:#f59e0b;flex-shrink:0}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:600;color:#888;text-align:left;padding:8px 12px;border-bottom:1px solid #eee;background:#fff}
+td{padding:12px;border-bottom:1px solid #f5f5f5;font-size:13px;vertical-align:middle}
+tr:hover td{background:#fafafa;cursor:pointer}
+.tbl-wrap{background:#fff;border-radius:10px;border:1px solid #eee;overflow:hidden;margin-bottom:1rem}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+.tag-warn{background:#fef3c7;color:#92400e}
+.tag-ok{background:#d1fae5;color:#065f46}
+.tag-info{background:#dbeafe;color:#1e40af}
+.detail{background:#fff;border-radius:10px;border:1px solid #eee;padding:1.25rem;margin-bottom:1rem}
+.detail-top{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+.avatar{width:44px;height:44px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:17px;color:#1e40af;flex-shrink:0}
+.dl{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;font-size:13px;margin-bottom:1rem}
+.dl dt{color:#888;font-weight:500}
+.ai-box{background:#f9f9f9;border-radius:8px;padding:12px;margin-top:4px}
+.ai-lbl{font-size:12px;font-weight:600;margin-bottom:6px;color:#444}
+.ai-txt{font-size:13px;line-height:1.7;color:#1a1a1a}
+.spinner{display:inline-block;width:13px;height:13px;border:2px solid #ddd;border-top-color:#1a1a1a;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
+@media print{
+  body{background:#fff}
+  .no-print{display:none!important}
+  .print-only{display:block!important}
+  #print-area{display:block!important}
+  body > *{display:none}
+  #print-area{display:block;position:fixed;top:0;left:0;width:100%;padding:20px;font-family:'Hiragino Sans',sans-serif}
+  .ph{text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #000}
+  .ph h1{font-size:18px;font-weight:700;margin-bottom:3px}
+  .ph p{font-size:10px;color:#555}
+  .ps{margin-bottom:12px}
+  .ps-t{font-size:12px;font-weight:700;background:#f0f0f0;padding:5px 8px;border-left:3px solid #000;margin-bottom:6px}
+  .pr{display:grid;grid-template-columns:110px 1fr;font-size:11px;padding:3px 0;border-bottom:0.5px solid #eee}
+  .pl{color:#555;font-weight:500}
+  .pc{margin-bottom:5px;font-size:10px;padding:5px 7px;background:#f9f9f9;border-radius:3px}
+  .pc-t{font-weight:600;margin-bottom:2px;font-size:11px}
+  .pc-p{color:#555;line-height:1.5}
+  .psign{margin-top:16px;padding-top:12px;border-top:1px solid #000;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .psign-box{border-bottom:1px solid #000;padding-bottom:28px}
+  .psign-lbl{font-size:10px;color:#555;margin-bottom:6px}
+  .pfoot{margin-top:12px;text-align:center;font-size:9px;color:#888;border-top:0.5px solid #ccc;padding-top:6px}
+}
 </style>
 </head>
 <body>
-<div class="overlay" id="overlay"><div class="spinner"></div><div>送信中...</div></div>
-<div class="header"><h1>Voyage Nike</h1><p>新規お客様カルテ</p></div>
-<div class="container">
-<div class="step-bar" id="step-bar">
-<div class="step-item"><div class="step-circle active" id="sc0">1</div><div class="step-label active" id="sl0">基本情報</div></div>
-<div class="step-line" id="line0"></div>
-<div class="step-item"><div class="step-circle" id="sc1">2</div><div class="step-label" id="sl1">施術承諾</div></div>
-<div class="step-line" id="line1"></div>
-<div class="step-item"><div class="step-circle" id="sc2">3</div><div class="step-label" id="sl2">アレルギー</div></div>
+
+<div id="print-area" style="display:none"></div>
+
+<div class="wrap no-print">
+<div class="header">
+  <h1>📋 Voyage Nike　スタッフ管理</h1>
+  <button class="btn-print" onclick="loadRecords()">🔄 更新</button>
+  <button class="btn-print" onclick="exportCSV()">⬇ CSV</button>
 </div>
 
-<!-- STEP 1 -->
-<div class="page active" id="page0">
-<div class="card">
-<div class="card-title">基本情報</div>
-<div class="row2">
-<div class="field"><label>お名前<span class="req">*</span></label><input id="f_name" type="text" placeholder="山田 花子"></div>
-<div class="field"><label>ふりがな</label><input id="f_kana" type="text" placeholder="やまだ はなこ"></div>
-</div>
-<div class="row2">
-<div class="field"><label>生年月日</label><input id="f_dob" type="date"></div>
-<div class="field"><label>性別</label>
-<div class="sel-group">
-<button type="button" class="sel-btn" id="g_f" onclick="selGender('女性')">女性</button>
-<button type="button" class="sel-btn" id="g_m" onclick="selGender('男性')">男性</button>
-</div>
-</div>
-</div>
-<div class="field" style="margin-bottom:0"><label>電話番号<span class="req">*</span></label><input id="f_tel" type="tel" placeholder="090-0000-0000" inputmode="tel"></div>
-<div class="err" id="err0">お名前と電話番号は必須です。</div>
-</div>
-<div class="card">
-<div class="card-title">来店のきっかけ</div>
-<div class="tog-group">
-<button type="button" class="tog-btn" id="ref_hpb" onclick="togRef('ref_hpb','ホットペッパービューティー')"><span class="tog-icon"></span>ホットペッパービューティー</button>
-<button type="button" class="tog-btn" id="ref_sns" onclick="togRef('ref_sns','Instagram/SNS')"><span class="tog-icon"></span>Instagram / SNS</button>
-<button type="button" class="tog-btn" id="ref_int" onclick="togRef('ref_int','ご紹介')"><span class="tog-icon"></span>ご友人・ご家族のご紹介</button>
-<button type="button" class="tog-btn" id="ref_walk" onclick="togRef('ref_walk','通りかかり')"><span class="tog-icon"></span>近くを通りかかって</button>
-</div>
-</div>
-<div class="card">
-<div class="card-title">お悩み・ご要望</div>
-<div class="field" style="margin-bottom:0"><textarea id="f_concern" placeholder="くせ毛が気になる、カラーしたい、エクステをつけたいなど、お気軽にご記入ください。"></textarea></div>
-</div>
-<button class="btn-primary" onclick="next0()">次へ →</button>
+<div class="status">
+  <div class="dot" id="sdot"></div>
+  <span id="stxt">接続中...</span>
 </div>
 
-<!-- STEP 2 -->
-<div class="page" id="page1">
-<div class="notice">安全な施術をご提供するためにご協力をお願いいたします。以下の内容をご確認のうえ、各項目にご同意ください。</div>
-<div class="card" style="font-size:12px;color:#555;line-height:1.8;margin-bottom:12px">通常、ヘアカラー等の薬剤を使用する場合は事前にパッチテストが必要です。パッチテストをご希望のお客様は、当日施術はできかねます。来店当日パッチテストを行わずにヘアカラー等をご希望される場合、下記の内容をご了承のうえ自身の責任において施術を希望する事をご了承頂いております。</div>
-<div class="consent-box"><h4>① ブリーチ・カラー・パーマ・縮毛矯正による頭皮の異常</h4><p>当社規定メニューでのブリーチ、ヘアカラー、パーマネントウェーブ、縮毛矯正、また、その他のカラー（眉カラー）で起きた頭皮の異常（荒れ、湿疹、かぶれ、その他異常）。</p><label class="consent-chk"><input type="checkbox" id="c1"> 理解・同意します</label></div>
-<div class="consent-box"><h4>② 毛髪ダメージによる施術困難</h4><p>毛髪のダメージが著しく、スタイリストが困難だと判断したが、それでも尚施術を希望した場合。</p><label class="consent-chk"><input type="checkbox" id="c2"> 理解・同意します</label></div>
-<div class="consent-box"><h4>③ エクステンション・コーンロウ・ブレイズによる頭皮の異常</h4><p>エクステンション、コーンロウ、ブレイズ、などで出来た頭皮の異常（荒れ、湿疹、かぶれ、その他異常）。</p><label class="consent-chk"><input type="checkbox" id="c3"> 理解・同意します</label></div>
-<div class="consent-box"><h4>④ 妊娠中の施術による体調異常</h4><p>妊娠中に施術を行うにあたり、体調不良などの体の異常。</p><label class="consent-chk"><input type="checkbox" id="c4"> 理解・同意します</label></div>
-<div class="consent-box"><h4>⑤ お連れ様・お子様の怪我・火傷</h4><p>お連れ様などの施術以外での怪我、又は火傷などをした場合。※施術の行わないお子様の同伴はおこなっておりませんのでご了承ください。</p><label class="consent-chk"><input type="checkbox" id="c5"> 理解・同意します</label></div>
-<div class="consent-box"><h4>⑥ 返金・仕上がり差異について</h4><p>上記事項に対しての施術料の返金等は行っておりません。尚、ご希望のイメージと差異がございました場合は、施術日から一週間のお直し保証期間がございますが、当店にご連絡を頂き、ご来店をお願いしております。</p><label class="consent-chk"><input type="checkbox" id="c6"> 理解・同意します</label></div>
-<div class="consent-box"><h4>⑦ 個人情報の取り扱いについて</h4><p>ご記入いただいた個人情報は、施術管理・サービス向上の目的にのみ使用し、第三者への提供は行いません。</p><label class="consent-chk"><input type="checkbox" id="c7"> 理解・同意します</label></div>
-<div class="err" id="err1">すべての項目にご同意をお願いします。</div>
-<div class="nav-row"><button class="btn-back" onclick="goPage(0)">←</button><button class="btn-primary" onclick="next1()">次へ →</button></div>
+<div class="stats">
+  <div class="stat"><div class="stat-lbl">総顧客数</div><div class="stat-val" id="st-total">—</div></div>
+  <div class="stat"><div class="stat-lbl">アレルギーあり</div><div class="stat-val" id="st-al">—</div></div>
+  <div class="stat"><div class="stat-lbl">本日受付</div><div class="stat-val" id="st-today">—</div></div>
 </div>
 
-<!-- STEP 3 -->
-<div class="page" id="page2">
-<div class="card">
-<div class="card-title">アレルギー確認</div>
-<div class="field">
-<label>アレルギーの有無<span class="req">*</span></label>
-<div class="sel-group3">
-<button type="button" class="sel-btn" id="al_none" onclick="selAl('なし')">なし</button>
-<button type="button" class="sel-btn" id="al_yes" onclick="selAl('あり')">あり</button>
-<button type="button" class="sel-btn" id="al_unk" onclick="selAl('不明')">不明</button>
-</div>
-</div>
-<div id="al-detail" style="display:none">
-<div class="field"><label>種類（複数可）</label>
-<div class="tog-group">
-<button type="button" class="tog-btn" id="alt_1" onclick="togAlt('alt_1','ジアミン（カラー剤）')"><span class="tog-icon"></span>ジアミン（カラー剤）</button>
-<button type="button" class="tog-btn" id="alt_2" onclick="togAlt('alt_2','パーマ液・縮毛矯正剤')"><span class="tog-icon"></span>パーマ液・縮毛矯正剤</button>
-<button type="button" class="tog-btn" id="alt_3" onclick="togAlt('alt_3','ラテックス（手袋）')"><span class="tog-icon"></span>ラテックス（手袋）</button>
-<button type="button" class="tog-btn" id="alt_4" onclick="togAlt('alt_4','金属（ニッケル等）')"><span class="tog-icon"></span>金属（ニッケル等）</button>
-<button type="button" class="tog-btn" id="alt_5" onclick="togAlt('alt_5','香料・フレグランス')"><span class="tog-icon"></span>香料・フレグランス</button>
-</div>
-</div>
-<div class="field"><label>詳細・症状</label><textarea id="f_aldetail" placeholder="例：ジアミンでかぶれたことがある など"></textarea></div>
-</div>
-</div>
-<div class="card">
-<div class="card-title">頭皮・皮膚の状態</div>
-<div class="tog-group">
-<button type="button" class="tog-btn" id="sk_1" onclick="togSkin('sk_1','頭皮に傷・炎症あり')"><span class="tog-icon"></span>頭皮に傷・炎症あり</button>
-<button type="button" class="tog-btn" id="sk_2" onclick="togSkin('sk_2','アトピー性皮膚炎')"><span class="tog-icon"></span>アトピー性皮膚炎</button>
-<button type="button" class="tog-btn" id="sk_3" onclick="togSkin('sk_3','敏感肌・乾燥肌')"><span class="tog-icon"></span>敏感肌・乾燥肌</button>
-<button type="button" class="tog-btn" id="sk_4" onclick="togSkin('sk_4','皮膚科の治療中')"><span class="tog-icon"></span>皮膚科の治療中（薬使用中）</button>
-</div>
-</div>
-<div class="card">
-<div class="card-title">過去の施術トラブル</div>
-<div class="field" style="margin-bottom:0"><textarea id="f_trouble" placeholder="例：カラー後に頭皮が赤くなった（なければ空欄）"></textarea></div>
-</div>
-<div class="err" id="err2">アレルギーの有無を選択してください。</div>
-<div class="nav-row"><button class="btn-back" onclick="goPage(1)">←</button><button class="btn-primary" id="submit-btn" onclick="submitForm()">送信する</button></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr>
+    <th style="width:120px">お名前</th>
+    <th style="width:110px">電話番号</th>
+    <th style="width:80px">受付日時</th>
+    <th style="width:80px">アレルギー</th>
+    <th style="width:60px">承諾</th>
+  </tr></thead>
+  <tbody id="tbody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:#888"><span class="spinner"></span> 読み込み中...</td></tr></tbody>
+</table>
 </div>
 
-<!-- 完了 -->
-<div class="page" id="page3">
-<div class="done-page">
-<div class="done-check">✓</div>
-<div class="done-title">ありがとうございました</div>
-<div class="done-sub">カルテの登録が完了しました。<br>スタッフがご案内するまで<br>少々お待ちください。</div>
-</div>
-</div>
+<div id="detail-wrap"></div>
 </div>
 
 <script>
 const SUPA_URL='https://uiwytympwslckwnzpygz.supabase.co';
 const SUPA_KEY='sb_publishable_WoZc1MkcvKkoCTQdSucQyQ_SZtbIngh';
-let selectedGender='';
-let selectedAl='';
-const refMap={};
-const altMap={};
-const skinMap={};
+let allRecords=[];
 
-function selGender(v){selectedGender=v;document.getElementById('g_f').classList.toggle('selected',v==='女性');document.getElementById('g_m').classList.toggle('selected',v==='男性');}
-function selAl(v){selectedAl=v;['al_none','al_yes','al_unk'].forEach(id=>document.getElementById(id).classList.remove('selected'));document.getElementById(v==='なし'?'al_none':v==='あり'?'al_yes':'al_unk').classList.add('selected');document.getElementById('al-detail').style.display=v==='あり'?'block':'none';}
-function togRef(id,v){refMap[v]=!refMap[v];const btn=document.getElementById(id);btn.classList.toggle('selected',refMap[v]);btn.querySelector('.tog-icon').textContent=refMap[v]?'✓':'';}
-function togAlt(id,v){altMap[v]=!altMap[v];const btn=document.getElementById(id);btn.classList.toggle('selected',altMap[v]);btn.querySelector('.tog-icon').textContent=altMap[v]?'✓':'';}
-function togSkin(id,v){skinMap[v]=!skinMap[v];const btn=document.getElementById(id);btn.classList.toggle('selected',skinMap[v]);btn.querySelector('.tog-icon').textContent=skinMap[v]?'✓':'';}
-function goPage(n){document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i===n));updateSteps(n);window.scrollTo(0,0);}
-function updateSteps(cur){[0,1,2].forEach(i=>{const c=document.getElementById('sc'+i);const l=document.getElementById('sl'+i);c.className='step-circle'+(i<cur?' done':i===cur?' active':'');l.className='step-label'+(i===cur?' active':'');if(i<2)document.getElementById('line'+i).className='step-line'+(i<cur?' done':'');});}
-function next0(){const name=document.getElementById('f_name').value.trim();const tel=document.getElementById('f_tel').value.trim();const err=document.getElementById('err0');if(!name||!tel){err.style.display='block';return;}err.style.display='none';goPage(1);}
-function next1(){const err=document.getElementById('err1');const boxes=[...document.querySelectorAll('#page1 input[type=checkbox]')];if(!boxes.every(c=>c.checked)){err.style.display='block';return;}err.style.display='none';goPage(2);}
-async function submitForm(){const err=document.getElementById('err2');if(!selectedAl){err.style.display='block';return;}err.style.display='none';document.getElementById('submit-btn').disabled=true;document.getElementById('overlay').classList.add('show');const refs=Object.keys(refMap).filter(k=>refMap[k]);const altypes=Object.keys(altMap).filter(k=>altMap[k]);const skin=Object.keys(skinMap).filter(k=>skinMap[k]);const payload={name:document.getElementById('f_name').value.trim(),kana:document.getElementById('f_kana').value.trim()||null,dob:document.getElementById('f_dob').value||null,gender:selectedGender||null,tel:document.getElementById('f_tel').value.trim(),visit_date:new Date().toISOString().slice(0,10),refs:refs.length?refs.join('・'):null,concern:document.getElementById('f_concern').value.trim()||null,allergy:selectedAl,altypes:altypes.length?altypes.join('・'):null,skin:skin.length?skin.join('・'):null,trouble:document.getElementById('f_trouble').value.trim()||null,consent:true,summary:null};try{const res=await fetch(SUPA_URL+'/rest/v1/cartes',{method:'POST',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(payload)});if(!res.ok)throw new Error(await res.text());document.getElementById('overlay').classList.remove('show');document.getElementById('step-bar').style.display='none';goPage(3);}catch(e){document.getElementById('overlay').classList.remove('show');document.getElementById('submit-btn').disabled=false;alert('送信に失敗しました。\n\nエラー: '+e.message);}}
+async function supaFetch(path,opts={}){
+  const res=await fetch(SUPA_URL+'/rest/v1/'+path,{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{})},...opts});
+  if(!res.ok)throw new Error(await res.text());
+  const t=await res.text();return t?JSON.parse(t):null;
+}
+
+async function loadRecords(){
+  document.getElementById('sdot').style.background='#f59e0b';
+  document.getElementById('stxt').textContent='読み込み中...';
+  try{
+    allRecords=await supaFetch('cartes?order=created_at.desc&limit=200')||[];
+    renderTable();
+    const today=new Date().toISOString().slice(0,10);
+    document.getElementById('st-total').textContent=allRecords.length;
+    document.getElementById('st-al').textContent=allRecords.filter(r=>r.allergy==='あり').length;
+    document.getElementById('st-today').textContent=allRecords.filter(r=>r.visit_date===today).length;
+    document.getElementById('sdot').style.background='#10b981';
+    document.getElementById('stxt').textContent='Supabase接続済み — '+new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})+'更新';
+  }catch(e){
+    document.getElementById('sdot').style.background='#ef4444';
+    document.getElementById('stxt').textContent='接続エラー: '+e.message;
+  }
+}
+
+function renderTable(){
+  const tb=document.getElementById('tbody');
+  if(!allRecords.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:#888">データがありません</td></tr>';return;}
+  tb.innerHTML=allRecords.map(r=>`<tr onclick="showDetail('${r.id}')">
+    <td style="font-weight:600">${r.name}</td>
+    <td>${r.tel}</td>
+    <td style="font-size:11px;color:#888">${r.created_at?new Date(r.created_at).toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—'}</td>
+    <td>${r.allergy==='あり'?'<span class="tag tag-warn">⚠ あり</span>':r.allergy==='不明'?'<span class="tag tag-info">不明</span>':'<span class="tag tag-ok">なし</span>'}</td>
+    <td>${r.consent?'<span class="tag tag-ok">済み</span>':'<span class="tag tag-warn">未完</span>'}</td>
+  </tr>`).join('');
+}
+
+function showDetail(id){
+  const r=allRecords.find(x=>x.id===id);if(!r)return;
+  document.getElementById('detail-wrap').innerHTML=`
+<div class="detail">
+  <div class="detail-top">
+    <div class="avatar">${r.name.charAt(0)}</div>
+    <div>
+      <div style="font-size:16px;font-weight:700">${r.name}</div>
+      <div style="font-size:12px;color:#888;margin-top:2px">${r.kana||''} ／ ${r.gender||'性別未選択'} ／ ${r.dob||'生年月日未記入'}</div>
+    </div>
+    <button class="btn" style="margin-left:auto;background:#1a1a1a;color:#fff;border-color:#1a1a1a" onclick="printCarte('${r.id}')">🖨 印刷</button>
+  </div>
+  <dl class="dl">
+    <dt>電話番号</dt><dd>${r.tel}</dd>
+    <dt>来店日</dt><dd>${r.visit_date||'—'}</dd>
+    <dt>来店きっかけ</dt><dd>${r.refs||'—'}</dd>
+    <dt>お悩み・ご要望</dt><dd style="white-space:pre-wrap">${r.concern||'なし'}</dd>
+    <dt>アレルギー</dt><dd>${r.allergy==='あり'?`<span class="tag tag-warn">⚠ あり：${r.altypes||'詳細未記入'}</span>`:r.allergy||'—'}</dd>
+    <dt>頭皮・皮膚</dt><dd>${r.skin||'問題なし'}</dd>
+    <dt>過去トラブル</dt><dd>${r.trouble||'なし'}</dd>
+    <dt>施術承諾</dt><dd>${r.consent?'<span class="tag tag-ok">✓ 全項目同意</span>':'<span class="tag tag-warn">未同意あり</span>'}</dd>
+  </dl>
+  <div class="ai-box">
+    <div class="ai-lbl">✨ AI要約 <span id="ai-spin" style="display:none" class="spinner"></span></div>
+    <div class="ai-txt" id="ai-txt">${r.summary||'<span style="color:#aaa">未生成</span>'}</div>
+    <button class="btn" style="margin-top:8px;font-size:12px" onclick="genAI('${r.id}')">${r.summary?'再生成':'AI要約を生成'}</button>
+  </div>
+</div>`;
+}
+
+function printCarte(id){
+  const r=allRecords.find(x=>x.id===id);if(!r)return;
+  const now=new Date().toLocaleDateString('ja-JP');
+  const pa=document.getElementById('print-area');
+  pa.innerHTML=`
+<div class="ph"><h1>Voyage Nike　新規カルテ・施術承諾書</h1><p>〒171-0014 東京都豊島区池袋2-18-1 山鹿ビル2階　TEL 03-6914-3118　印刷日：${now}</p></div>
+<div class="ps"><div class="ps-t">基本情報</div>
+<div class="pr"><span class="pl">お名前</span><span>${r.name}（${r.kana||'ふりがな未記入'}）</span></div>
+<div class="pr"><span class="pl">生年月日</span><span>${r.dob||'未記入'}</span></div>
+<div class="pr"><span class="pl">性別</span><span>${r.gender||'未選択'}</span></div>
+<div class="pr"><span class="pl">電話番号</span><span>${r.tel}</span></div>
+<div class="pr"><span class="pl">来店日</span><span>${r.visit_date||'—'}</span></div>
+<div class="pr"><span class="pl">来店きっかけ</span><span>${r.refs||'—'}</span></div>
+<div class="pr"><span class="pl">お悩み・ご要望</span><span>${r.concern||'なし'}</span></div></div>
+<div class="ps"><div class="ps-t">アレルギー・健康情報</div>
+<div class="pr"><span class="pl">アレルギー</span><span>${r.allergy}${r.altypes?' （'+r.altypes+'）':''}</span></div>
+<div class="pr"><span class="pl">頭皮・皮膚</span><span>${r.skin||'問題なし'}</span></div>
+<div class="pr"><span class="pl">過去トラブル</span><span>${r.trouble||'なし'}</span></div></div>
+<div class="ps"><div class="ps-t">施術承諾書</div>
+<div style="font-size:10px;color:#555;line-height:1.6;margin-bottom:8px;padding:6px;background:#f9f9f9">安全な施術をお客様にご提供する為にご協力をお願いしております。下記の内容をご了承の上、施術を希望する事をご了承頂いております。</div>
+<div class="pc"><div class="pc-t">① ブリーチ・カラー・パーマ・縮毛矯正による頭皮の異常</div><div class="pc-p">当社規定メニューでのブリーチ、ヘアカラー、パーマネントウェーブ、縮毛矯正、また、その他のカラー（眉カラー）で起きた頭皮の異常（荒れ、湿疹、かぶれ、その他異常）。</div></div>
+<div class="pc"><div class="pc-t">② 毛髪ダメージによる施術困難</div><div class="pc-p">毛髪のダメージが著しく、スタイリストが困難だと判断したが、それでも尚施術を希望した場合。</div></div>
+<div class="pc"><div class="pc-t">③ エクステンション・コーンロウ・ブレイズによる頭皮の異常</div><div class="pc-p">エクステンション、コーンロウ、ブレイズ、などで出来た頭皮の異常（荒れ、湿疹、かぶれ、その他異常）。</div></div>
+<div class="pc"><div class="pc-t">④ 妊娠中の施術による体調異常</div><div class="pc-p">妊娠中に施術を行うにあたり、体調不良などの体の異常。</div></div>
+<div class="pc"><div class="pc-t">⑤ お連れ様・お子様の怪我・火傷</div><div class="pc-p">お連れ様などの施術以外での怪我、又は火傷などをした場合。※施術の行わないお子様の同伴はおこなっておりませんのでご了承ください。</div></div>
+<div class="pc"><div class="pc-t">⑥ 返金・仕上がり差異について</div><div class="pc-p">上記事項に対しての施術料の返金等は行っておりません。施術日から一週間のお直し保証期間がございますが、当店にご連絡を頂き、ご来店をお願いしております。</div></div>
+<div class="pc"><div class="pc-t">⑦ 個人情報の取り扱いについて</div><div class="pc-p">ご記入いただいた個人情報は、施術管理・サービス向上の目的にのみ使用し、第三者への提供は行いません。</div></div>
+<div style="margin-top:8px;font-size:11px;font-weight:700">承諾状況：${r.consent?'✓ 全項目同意済み':'未同意あり'}</div></div>
+<div class="psign">
+<div class="psign-box"><div class="psign-lbl">お客様署名</div></div>
+<div class="psign-box"><div class="psign-lbl">日付：　　年　　月　　日</div></div>
+</div>
+<div class="pfoot">株式会社 voyage　〒171-0014 東京都豊島区池袋2-18-1 山鹿ビル2階　TEL 03-6914-3118</div>`;
+  pa.style.display='block';
+  setTimeout(()=>{window.print();pa.style.display='none';},300);
+}
+
+async function genAI(id){
+  const r=allRecords.find(x=>x.id===id);if(!r)return;
+  document.getElementById('ai-spin').style.display='inline-block';
+  document.getElementById('ai-txt').innerHTML='<span style="color:#aaa">生成中...</span>';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`美容室スタッフ向けに3〜4行で要約。アレルギー優先。\n氏名:${r.name} 性別:${r.gender||'不明'} 電話:${r.tel}\nお悩み:${r.concern||'なし'}\nアレルギー:${r.allergy}${r.altypes?' ('+r.altypes+')':''}\n頭皮:${r.skin||'問題なし'}\nトラブル:${r.trouble||'なし'}`}]})});
+    const json=await res.json();
+    const summary=json.content?.map(b=>b.text||'').join('')||'取得できませんでした。';
+    await supaFetch('cartes?id=eq.'+id,{method:'PATCH',body:JSON.stringify({summary})});
+    r.summary=summary;
+    document.getElementById('ai-txt').textContent=summary;
+  }catch(e){
+    document.getElementById('ai-txt').innerHTML='<span style="color:red">エラー</span>';
+  }finally{document.getElementById('ai-spin').style.display='none';}
+}
+
+function exportCSV(){
+  if(!allRecords.length){alert('データがありません。');return;}
+  const h=['氏名','ふりがな','性別','生年月日','電話番号','来店日','来店きっかけ','お悩み','アレルギー','アレルギー詳細','頭皮・皮膚','過去トラブル','承諾','AI要約'];
+  const rows=allRecords.map(r=>[r.name,r.kana||'',r.gender||'',r.dob||'',r.tel,r.visit_date||'',r.refs||'',r.concern||'',r.allergy||'',r.altypes||'',r.skin||'',r.trouble||'',r.consent?'同意':'未同意',r.summary||''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const csv='\uFEFF'+[h.map(v=>`"${v}"`).join(','),...rows].join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download='voyagenike_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+loadRecords();
 </script>
 </body>
 </html>
